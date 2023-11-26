@@ -8,12 +8,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class NewsletterController extends AbstractController
 {
     #[Route('/newsletter/subscribe', name: 'newsletter_subscribe', methods:[Request::METHOD_GET, Request::METHOD_POST])]
-    public function subscribe(Request $request, EntityManagerInterface $em): Response
+    public function subscribe(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
     {
         $newsletterEmail = new Newsletter();
         $form =$this ->createForm(NewsletterType::class, $newsletterEmail);
@@ -26,7 +28,13 @@ class NewsletterController extends AbstractController
             $em->persist($newsletterEmail);
             $em->flush();
 
-            // $emailNotification->confirmSubsciption($newsletterEmail);
+            $email = new Email();
+            $email->from('hello@example.com');
+            $email->to('you@example.com');
+            $email->subject('time for symfony mailer');
+            $email->text("Votre email" . $newsletterEmail->getEmail() . "a bien été enregistré");
+            $mailer->send($email);
+
             $this->addFlash('success', 'Votre email a été enregistré, merci');
             return $this->redirectToRoute('home');
         }
