@@ -1,20 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ArticleController!{% endblock %}
+{% block title %}
+Articles
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% for article in articles %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ 'articles' }}! ✅</h1>
+<div>{{ article.title }}</div>
 
-   <h2>  {{'recepies'}}</h2>
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/EMPLOI_FORMATION/2023/FORMATION/HUMAN BOOSTER/Cours/php_2/sf/sf_recepies/src/Controller/ArticleController.php'|file_link(0) }}">src/Controller/ArticleController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/EMPLOI_FORMATION/2023/FORMATION/HUMAN BOOSTER/Cours/php_2/sf/sf_recepies/templates/article/index.html.twig'|file_link(0) }}">templates/article/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% else %}
+<p>Nothing to show</p>
+{% endfor %}
 {% endblock %}

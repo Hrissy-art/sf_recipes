@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +21,7 @@ class CategoryController extends AbstractController
             'categories' => $categoryRepository->findAll(),
         ]);
     }
-    #[Route('/categories/{id}', name: 'category_item')]
+    #[Route('/categories/{id<\d+>}', name: 'category_item')]
     public function item(CategoryRepository $categoryRepository, int $id): Response
     {
         $category = $categoryRepository ->find($id);
@@ -26,10 +30,29 @@ class CategoryController extends AbstractController
 
             throw new FileNotFoundException('Not found');
         }
+
         return $this->render('category/item.html.twig', [
-            'category' => $category
+            'category' => $category,
+            
         ]);
+
     }
+     #[Route('/categories/new', name: 'new_category')]
+     public function new(Request $request, EntityManagerInterface $em): Response
+
+     { $category = new Category();
+        $form = $this->createForm(CategoryType ::class, $category);
+        $form ->handleRequest($request);
+
+        if ($form->isSubmitted() && $form -> isValid()) {
+$em -> persist($category);
+$em -> flush();
+        }
+        return $this->renderForm("category/new.html.twig",
+        ['category_form' => $form]);
+     }
+        
+    
 
     
 }

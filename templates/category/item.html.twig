@@ -6,4 +6,10 @@
 
 {% block body %}
   <h1>{{ category.name }}</h1>
+
+  {% for article in category.articles %}
+    {% include 'article/_article_card.html.twig' with { article: article } only %}
+  {% else %}
+    <p>Aucun article dans cette catégorie</p>
+  {% endfor %}
 {% endblock %}
