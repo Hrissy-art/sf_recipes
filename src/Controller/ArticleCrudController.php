@@ -78,4 +78,24 @@ class ArticleCrudController extends AbstractController
 
         return $this->redirectToRoute('app_article_crud_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/user/article',name: 'create_article' )]
+
+    public function createArticle(Request $request, EntityManagerInterface $entityManager)
+    {
+    $user = $this->getUser();
+    
+    $article = new Article ();
+    
+    $article->setTitle($request->request->get("new-title"));
+    $article->setCreatedOn(new \DateTime());
+    $article->setVisible(true);
+    $article->setCategory($request->request->get("new-category"));
+    $article->setAuthor($this -> getUser());
+    $article->setUser($user);
+    
+    $entityManager->persist($article);
+    $entityManager->flush();
+    
+    return $this->redirectToRoute('home');
+    }
 }

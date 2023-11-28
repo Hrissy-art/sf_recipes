@@ -27,25 +27,14 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 30; $i++){
 
-            $category = new Category ();
+            $category = new Category();
             $category-> setName( $faker ->realTextBetween(3,10));
 
             $manager->persist($category);
             $categories[] = $category;
         }
-     for ($i = 0; $i < 150; $i++)
-     {$article = new Article ();
-     $article -> setTitle ($faker->realTextBetween(3,10));
-     $article ->setCreatedOn ($faker ->dateTimeBetween('-2 years'));
-     $article ->setVisible ($faker ->boolean(80));
-     $article -> setCategory ($faker -> randomElement($categories));
 
-     $manager->persist($article);
-
-    }
-
-        $manager->flush();
-    
+        $users = [];
         $regularuser = new User ();
         $regularuser->setEmail("test@example.com");
        
@@ -60,8 +49,7 @@ class AppFixtures extends Fixture
         );
         $manager->persist($regularuser);
         $manager->flush();
-
-        $user = new User ();
+        $user = new User();
         $user->setEmail("admin@example.com");
        
         $user->setPassword(
@@ -76,6 +64,26 @@ class AppFixtures extends Fixture
 
         $manager->persist($user);
         $manager->flush();
+
+        $users = [$regularuser, $user];
+
+     for ($i = 0; $i < 150; $i++)
+     {$article = new Article ();
+     $article -> setTitle ($faker->realTextBetween(3,10));
+     $article ->setCreatedOn ($faker ->dateTimeBetween('-2 years'));
+     $article ->setVisible ($faker ->boolean(80));
+     $article -> setCategory ($faker -> randomElement($categories));
+     $article -> setAuthor ($faker -> randomElement($users));
+
+     $manager->persist($article);
+
+    }
+
+        $manager->flush();
+    
+       
+
+        
     }
 }
 

@@ -52,5 +52,5 @@ if ($form ->isSubmitted() && $form ->isValid())
 return $this->renderForm("article/new.html.twig",
         ['article_form' => $form]);
     }
-
+   
 }
