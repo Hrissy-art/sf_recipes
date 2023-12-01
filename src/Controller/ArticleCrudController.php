@@ -91,7 +91,6 @@ class ArticleCrudController extends AbstractController
     $article->setVisible(true);
     $article->setCategory($request->request->get("new-category"));
     $article->setAuthor($this -> getUser());
-    $article->setUser($user);
     
     $entityManager->persist($article);
     $entityManager->flush();
